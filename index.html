@@ -1,12 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Finance Stack Implementation Roadmap 2026</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Stack Implementation Roadmap 2026</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <style>* { box-sizing: border-box; margin: 0; padding: 0; }</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const DALE = "#2563eb";
+    const DALE_D = "#1d4ed8";
+    const CRISTINA = "#059669";
+    const CRISTINA_D = "#047857";
+
+    const WEEKS = [
+      { label: "1 Mar" }, { label: "8 Mar" }, { label: "15 Mar" }, { label: "22 Mar" },
+      { label: "29 Mar" }, { label: "5 Apr" }, { label: "12 Apr" }, { label: "19 Apr" },
+      { label: "26 Apr" }, { label: "3 May" }, { label: "10 May" }, { label: "17 May" },
+      { label: "24 May" }, { label: "31 May" }, { label: "7 Jun" }, { label: "14 Jun" },
+      { label: "21 Jun" }, { label: "28 Jun" }, { label: "5 Jul" }, { label: "12 Jul" },
+      { label: "19 Jul" },
+    ];
+
+    const PHASES = [
+      {
+        id: "P0", phase: "Pre-work", title: "Roadmap Preparation & Sign-Off", color: "#6366f1",
+        rows: [
+          { label: "February close",                                start: 0,   dur: 1.0, color: "#94a3b8" },
+          { label: "Gap analysis & stack audit",                    start: 1.0, dur: 1.0, color: "#6366f1" },
+          { label: "Phase design, sequencing & stress-testing",     start: 2.0, dur: 2.0, color: "#6366f1" },
+          { label: "Roadmap sign-off",                              start: 3.0, dur: 1.0, color: "#4338ca" },
+        ],
+        note: "1–8 Mar: Feb close. 9–13 Mar: gap analysis. 16–31 Mar: phase design, sequencing & stress-testing. 23–31 Mar: roadmap sign-off (overlaps intentionally). No implementation starts until 1 Apr."
+      },
+      {
+        id: "P1A", phase: "Phase 1A", title: "Xero Foundation", color: "#dc2626",
+        rows: [
+          { label: "Department taxonomy & tagging policy",           start: 6.0, dur: 0.5, color: DALE,     owner: "Dale" },
+          { label: "Activate tracking categories (all 4 entities)", start: 6.5, dur: 0.3, color: DALE,     owner: "Dale" },
+          { label: "Backdate Jan–Mar via Xero Find & Recode",       start: 6.8, dur: 1.0, color: CRISTINA, owner: "Cristina" },
+        ],
+        note: "Starts 12 Apr. Dale: taxonomy & activation. Cristina: backdate across all 4 entities w/c 14 Apr (runs in parallel)."
+      },
+      {
+        id: "P1B", phase: "Phase 1B", title: "Data Flow — Expensify, Cledara & Joiin", color: "#dc2626",
+        rows: [
+          { label: "Expensify — add dept tags to coding rules",              start: 6.8, dur: 1.0, color: DALE,     owner: "Dale" },
+          { label: "Cledara — confirm dept tags on UK Xero feed",           start: 6.8, dur: 1.0, color: DALE,     owner: "Dale" },
+          { label: "Basic Joiin flow check",                                start: 8.0, dur: 0.5, color: DALE_D,   owner: "Dale" },
+          { label: "Process change comms — Expensify & Cledara (minimal)", start: 8.0, dur: 0.5, color: CRISTINA, owner: "Cristina" },
+        ],
+        note: "Runs in parallel with backdate from 14 Apr. Joiin flow check held until backdate is complete to validate full historical data set."
+      },
+      {
+        id: "P1C", phase: "Phase 1C", title: "Budget & April Transactions", color: "#dc2626",
+        rows: [
+          { label: "Apply dept tags to April transactions (live)", start: 10.5, dur: 0.8, color: CRISTINA, owner: "Cristina" },
+          { label: "Reformat budget — Google Sheets → Joiin CSV", start: 11.0, dur: 0.8, color: DALE,     owner: "Dale" },
+          { label: "Upload group & dept budget to Joiin",         start: 11.8, dur: 0.5, color: DALE_D,   owner: "Dale" },
+        ],
+        note: "Completes Phase 1. Budget visible in Joiin at group and department level. April is first fully live month (done retrospectively)."
+      },
+      {
+        id: "P2", phase: "Phase 2", title: "Deel → Xero Bill Automation", color: "#dc2626",
+        rows: [
+          { label: "Connect Deel to all 4 Xero entities",       start: 6.8, dur: 0.8, color: DALE,     owner: "Dale" },
+          { label: "Map bill types to GL codes per entity",      start: 7.3, dur: 0.8, color: DALE,     owner: "Dale" },
+          { label: "Configure tracking category tags on bills",  start: 7.8, dur: 0.5, color: DALE,     owner: "Dale" },
+          { label: "Test & validate — all entities",             start: 8.3, dur: 0.5, color: CRISTINA, owner: "Cristina" },
+          { label: "Go live — post May close",                   start: 9.8, dur: 0.3, color: DALE_D,   owner: "Dale" },
+        ],
+        note: "Starts w/c 19 Apr once Phase 1A tracking categories are active. Automates Deel bills into Xero across all 4 entities. Payroll postings remain unchanged. Go live confirmed after May close."
+      },
+      {
+        id: "P3", phase: "Phase 3", title: "Dext Implementation", color: "#d97706",
+        rows: [
+          { label: "Dext config — 4 entity inboxes, COA & tags", start: 11.0, dur: 1.0, color: CRISTINA,   owner: "Cristina" },
+          { label: "AP policy, process design & comms",          start: 11.5, dur: 1.0, color: CRISTINA,   owner: "Cristina" },
+          { label: "Soft launch & parallel run",                 start: 12.0, dur: 1.0, color: CRISTINA,   owner: "Cristina" },
+          { label: "Tune auto-coding rules",                     start: 12.5, dur: 0.8, color: CRISTINA_D, owner: "Cristina" },
+          { label: "Hard cutover & go live",                     start: 13.3, dur: 0.5, color: CRISTINA_D, owner: "Cristina" },
+        ],
+        note: "19 May – 2 Jun. Led by Cristina with Dale support."
+      },
+      {
+        id: "P4", phase: "Phase 4", title: "Data Integrity, Validation & Close Readiness", color: "#0ea5e9",
+        rows: [
+          { label: "Cross-check all systems & automations",           start: 13.5, dur: 1.0, color: DALE,     owner: "Dale" },
+          { label: "Tracking Category full validation (all systems)", start: 13.5, dur: 1.5, color: DALE,     owner: "Dale" },
+          { label: "Data integrity & accuracy review",                start: 14.0, dur: 1.0, color: DALE,     owner: "Dale" },
+          { label: "June close — first close on full new stack",      start: 14.0, dur: 1.5, color: DALE,     owner: "Dale" },
+          { label: "June close continued",                            start: 15.5, dur: 1.0, color: CRISTINA, owner: "Cristina" },
+        ],
+        note: "Dale: 1–13 Jun — cross-checks, validation, data integrity and first two weeks of June close. Note: Dale absent 17–30 Jun — all judgement calls front-loaded to first two weeks."
+      },
+      {
+        id: "P5", phase: "Phase 5", title: "Year-End Preparation & Consolidation Audit", color: "#7c3aed",
+        rows: [
+          { label: "Year-end close package preparation",       start: 18.0, dur: 1.5, color: "#7c3aed" },
+          { label: "Joiin consolidation audit — all entities", start: 18.5, dur: 1.5, color: "#6d28d9" },
+        ],
+        note: "July. Year-end finalised and Joiin consolidation audit completed. Q3 group audit follows."
+      },
+    ];
+
+    const MONTH_GROUPS = [
+      { label: "MARCH", weeks: 4 }, { label: "APRIL", weeks: 4 },
+      { label: "MAY", weeks: 5 },   { label: "JUNE", weeks: 5 },
+      { label: "JULY", weeks: 3 },
+    ];
+
+    const KEY_DATES = [
+      { week: 4.1,   label: "31 Mar\nSign-off", color: "#6366f1" },
+      { week: 17.85, label: "30 Jun\nYear-end", color: "#dc2626" },
+    ];
+
+    const CLOSE_WINDOWS = [
+      { week: 4.5, label: "Mar close" }, { week: 8.7,  label: "Apr close" },
+      { week: 13.0, label: "May close" }, { week: 18.0, label: "Jun close" },
+    ];
+
+    const TW = 21;
+
+    function App() {
+      const [expanded, setExpanded] = React.useState(new Set(PHASES.map(p => p.id)));
+      const toggle = id => setExpanded(prev => {
+        const s = new Set(prev); s.has(id) ? s.delete(id) : s.add(id); return s;
+      });
+      const pct = w => `${(w / TW) * 100}%`;
+
+      return (
+        <div style={{ fontFamily: "system-ui, sans-serif", background: "#f8fafc", minHeight: "100vh", padding: "20px 16px" }}>
+          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 8 }}>
+                <div>
+                  <h1 style={{ fontSize: 18, fontWeight: 800, color: "#0f172a", margin: 0 }}>Finance Stack Implementation Gantt</h1>
+                  <p style={{ color: "#64748b", fontSize: 12, margin: "3px 0 0" }}>4 entities · In-house · Calendar year reporting · FY ends 30 Jun 2026 · Q3 group audit</p>
+                </div>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+                  {[
+                    { color: "#6366f1", label: "Roadmap prep" }, { color: "#dc2626", label: "Phase 1 & 2" },
+                    { color: "#d97706", label: "Phase 3" },       { color: "#0ea5e9", label: "Phase 4" },
+                    { color: "#7c3aed", label: "Phase 5" },       { color: DALE, label: "Dale" },
+                    { color: CRISTINA, label: "Cristina" },
+                  ].map(l => (
+                    <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: "#475569" }}>
+                      <div style={{ width: 10, height: 10, borderRadius: 2, background: l.color }} />{l.label}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ background: "white", borderRadius: 12, border: "1px solid #e2e8f0", overflow: "hidden" }}>
+
+              {/* Month headers */}
+              <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", borderBottom: "2px solid #e2e8f0" }}>
+                <div style={{ borderRight: "1px solid #e2e8f0", background: "#f8fafc" }} />
+                <div style={{ display: "flex" }}>
+                  {MONTH_GROUPS.map((m, i) => (
+                    <div key={m.label} style={{ flex: m.weeks, textAlign: "center", padding: "7px 0", fontSize: 11, fontWeight: 700, color: "#475569", letterSpacing: "0.08em", borderRight: i < MONTH_GROUPS.length - 1 ? "1px solid #e2e8f0" : "none", background: i % 2 === 0 ? "#f8fafc" : "#f1f5f9" }}>{m.label}</div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Week headers */}
+              <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", borderBottom: "1px solid #e2e8f0" }}>
+                <div style={{ padding: "6px 12px", fontSize: 10, color: "#94a3b8", fontWeight: 600, borderRight: "1px solid #e2e8f0", background: "#f8fafc" }}>PHASE / WORKSTREAM</div>
+                <div style={{ position: "relative", display: "grid", gridTemplateColumns: `repeat(${TW}, 1fr)` }}>
+                  {WEEKS.map((w, i) => (
+                    <div key={i} style={{ padding: "5px 0 5px 3px", fontSize: 9, color: "#94a3b8", fontWeight: 500, borderRight: i < TW - 1 ? "1px solid #f1f5f9" : "none", whiteSpace: "nowrap", overflow: "hidden" }}>{w.label}</div>
+                  ))}
+                  {KEY_DATES.map((kd, i) => (
+                    <div key={i} style={{ position: "absolute", left: pct(kd.week), top: 0, bottom: 0, width: 2, background: kd.color, opacity: 0.5, pointerEvents: "none" }} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Close windows */}
+              <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", borderBottom: "1px solid #f1f5f9", background: "#fafafa" }}>
+                <div style={{ padding: "4px 12px", fontSize: 9, color: "#94a3b8", fontWeight: 700, letterSpacing: "0.06em", borderRight: "1px solid #e2e8f0", display: "flex", alignItems: "center" }}>CLOSE WINDOWS</div>
+                <div style={{ position: "relative", height: 22 }}>
+                  {CLOSE_WINDOWS.map((cw, i) => (
+                    <div key={i} style={{ position: "absolute", left: `calc(${pct(cw.week)} + 2px)`, width: 56, top: 3, height: 16, background: "#fef9c3", borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 700, color: "#78716c", border: "1px solid #e7e5e4" }}>{cw.label}</div>
+                  ))}
+                  {KEY_DATES.map((kd, i) => (
+                    <div key={i} style={{ position: "absolute", left: pct(kd.week), top: 0, bottom: 0, width: 2, background: kd.color, opacity: 0.4, pointerEvents: "none" }} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Phases */}
+              {PHASES.map((phase, pi) => {
+                const isOpen = expanded.has(phase.id);
+                const isLast = pi === PHASES.length - 1;
+                return (
+                  <div key={phase.id} style={{ borderBottom: isLast ? "none" : "1px solid #e2e8f0" }}>
+                    <div onClick={() => toggle(phase.id)} style={{ display: "grid", gridTemplateColumns: "200px 1fr", cursor: "pointer", background: isOpen ? "#f8fafc" : "white", borderBottom: isOpen ? "1px solid #f1f5f9" : "none" }}>
+                      <div style={{ padding: "8px 10px 8px 12px", borderRight: "1px solid #e2e8f0", display: "flex", alignItems: "center", gap: 6 }}>
+                        <div style={{ width: 4, height: 28, background: phase.color, borderRadius: 2, flexShrink: 0 }} />
+                        <div>
+                          <div style={{ fontSize: 9, fontWeight: 700, color: phase.color, letterSpacing: "0.06em" }}>{phase.phase}</div>
+                          <div style={{ fontSize: 11, fontWeight: 700, color: "#0f172a", lineHeight: 1.3 }}>{phase.title}</div>
+                        </div>
+                        <div style={{ marginLeft: "auto", fontSize: 10, color: "#94a3b8" }}>{isOpen ? "▲" : "▼"}</div>
+                      </div>
+                      <div style={{ position: "relative", height: 44 }}>
+                        {(() => {
+                          const s = Math.min(...phase.rows.map(r => r.start));
+                          const e = Math.max(...phase.rows.map(r => r.start + r.dur));
+                          return (
+                            <div style={{ position: "absolute", left: `calc(${pct(s)} + 2px)`, width: `calc(${pct(e - s)} - 4px)`, top: 11, height: 22, background: phase.color, borderRadius: 5, opacity: isOpen ? 0.15 : 0.75, transition: "opacity 0.2s", display: "flex", alignItems: "center", paddingLeft: 8 }}>
+                              {!isOpen && <span style={{ fontSize: 10, color: "white", fontWeight: 700, whiteSpace: "nowrap" }}>{phase.title}</span>}
+                            </div>
+                          );
+                        })()}
+                        {KEY_DATES.map((kd, i) => (
+                          <div key={i} style={{ position: "absolute", left: pct(kd.week), top: 0, bottom: 0, width: 2, background: kd.color, opacity: 0.3, pointerEvents: "none" }} />
+                        ))}
+                      </div>
+                    </div>
+
+                    {isOpen && phase.rows.map((row, ri) => (
+                      <div key={ri} style={{ display: "grid", gridTemplateColumns: "200px 1fr", borderBottom: "1px solid #f8fafc" }}>
+                        <div style={{ padding: "5px 10px 5px 22px", borderRight: "1px solid #e2e8f0", fontSize: 10, color: "#475569", display: "flex", alignItems: "center", gap: 6, lineHeight: 1.3 }}>
+                          {row.owner && <div style={{ width: 6, height: 6, borderRadius: "50%", background: row.color, flexShrink: 0 }} />}
+                          {row.label}
+                        </div>
+                        <div style={{ position: "relative", height: 30 }}>
+                          <div style={{ position: "absolute", left: `calc(${pct(row.start)} + 2px)`, width: `calc(${pct(row.dur)} - 4px)`, top: 5, height: 20, background: row.color, borderRadius: 4, opacity: 0.85, minWidth: 6 }} />
+                          {KEY_DATES.map((kd, i) => (
+                            <div key={i} style={{ position: "absolute", left: pct(kd.week), top: 0, bottom: 0, width: 2, background: kd.color, opacity: 0.2, pointerEvents: "none" }} />
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+
+                    {isOpen && (
+                      <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", background: "#fafafa", borderTop: "1px solid #f1f5f9" }}>
+                        <div style={{ borderRight: "1px solid #e2e8f0" }} />
+                        <div style={{ padding: "5px 10px", fontSize: 10, color: "#64748b", fontStyle: "italic" }}>ⓘ {phase.note}</div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              {/* Key dates footer */}
+              <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", background: "#f8fafc", borderTop: "2px solid #e2e8f0" }}>
+                <div style={{ padding: "6px 12px", fontSize: 9, color: "#94a3b8", fontWeight: 700, letterSpacing: "0.06em", borderRight: "1px solid #e2e8f0" }}>KEY DATES</div>
+                <div style={{ position: "relative", height: 32 }}>
+                  {KEY_DATES.map((kd, i) => (
+                    <div key={i}>
+                      <div style={{ position: "absolute", left: pct(kd.week), top: 0, bottom: 0, width: 2, background: kd.color, opacity: 0.9 }} />
+                      <div style={{ position: "absolute", left: `calc(${pct(kd.week)} - 20px)`, top: 5, fontSize: 9, color: kd.color, fontWeight: 800, whiteSpace: "pre", textAlign: "center", lineHeight: 1.4 }}>{kd.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Capacity */}
+            <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "200px 1fr", background: "white", borderRadius: 10, border: "1px solid #e2e8f0", overflow: "hidden" }}>
+              <div style={{ padding: "8px 12px", borderRight: "1px solid #e2e8f0", fontSize: 9, fontWeight: 700, color: "#94a3b8", letterSpacing: "0.06em", display: "flex", alignItems: "center" }}>TEAM CAPACITY PRESSURE</div>
+              <div style={{ display: "grid", gridTemplateColumns: `repeat(${TW}, 1fr)` }}>
+                {WEEKS.map((w, i) => {
+                  let load = 0;
+                  PHASES.forEach(ph => ph.rows.forEach(r => { if (i >= r.start && i < r.start + r.dur) load++; }));
+                  const ratio = Math.min(load / 5, 1);
+                  const bg = ratio > 0.7 ? "#fef2f2" : ratio > 0.4 ? "#fffbeb" : ratio > 0 ? "#f0fdf4" : "#f8fafc";
+                  const tc = ratio > 0.7 ? "#dc2626" : ratio > 0.4 ? "#d97706" : "#16a34a";
+                  return (
+                    <div key={i} style={{ height: 36, background: bg, borderRight: i < TW - 1 ? "1px solid #f1f5f9" : "none", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: tc }}>
+                      {load > 0 ? `${load}` : ""}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div style={{ marginTop: 10, display: "flex", gap: 20, flexWrap: "wrap", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ fontSize: 11, color: "#94a3b8" }}>▲ / ▼ Click any phase header to expand or collapse workstreams</div>
+              <div style={{ display: "flex", gap: 16 }}>
+                <div style={{ fontSize: 11, color: "#6366f1", fontWeight: 700 }}>━━ 31 Mar: Roadmap sign-off</div>
+                <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 700 }}>━━ 30 Jun: Year-end</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
 </html>
